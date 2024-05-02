@@ -7,6 +7,7 @@ import { FaCalendarAlt } from 'react-icons/fa'
 import H2 from '../tipography/H2'
 import Button from '../inputs/Button'
 import DateNavigator from './DateNavigator'
+import Calendar from '../calendar/Calendar'
 
 const Container = styled.div`
   display: flex;
@@ -17,14 +18,14 @@ const Container = styled.div`
   width: 100%;
   min-height: 100vh;
   background-color: ${(props) => props.theme.colors.white};
-  padding: 30px 200px;
+  padding: 30px 150px;
   overflow: scroll;
 `
 
 const ContentContainer = styled.div`
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   padding: 40px;
 `
 
@@ -70,6 +71,7 @@ export default function Schedule() {
             IR PARA COMANDAS
           </Button>
         </HeaderContentContainer>
+        <Calendar />
       </ContentContainer>
     </Container>
   )
