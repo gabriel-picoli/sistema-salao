@@ -1,17 +1,14 @@
 import { useState } from 'react'
-
 import styled from 'styled-components'
-
 import { FaCalendarAlt } from 'react-icons/fa'
-
 import H2 from '../tipography/H2'
 import Button from '../inputs/Button'
 import DateNavigator from './DateNavigator'
 import CalendarSchedule from '../calendar/CalendarSchedule'
+import ProfilePic from '../profile/ProfilePic'
 
 const Container = styled.div`
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -39,8 +36,19 @@ const ClickCalendar = styled.div`
   cursor: pointer;
 `
 
+const ProfilePicContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  align-items: center;
+  justify-items: center;
+  margin-top: 40px;
+  margin-bottom: -30px;
+  width: 100%;
+  padding-left: 80px;
+  padding-right: 20px;
+`
+
 export default function Schedule() {
-  // useState para hover no icone
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -48,10 +56,9 @@ export default function Schedule() {
       <ContentContainer>
         <HeaderContentContainer>
           <H2>Agenda</H2>
-          {/* envolve o icone em ClickCalendar pra deixar clicavel */}
           <ClickCalendar
-            onMouseEnter={() => setHovered(true)} // mouse passa, define como hover
-            onMouseLeave={() => setHovered(false)} // mouse sai, retira definiçao
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
             onClick={() => console.log('clicou calendario')}
           >
             <FaCalendarAlt
@@ -65,12 +72,53 @@ export default function Schedule() {
             />
           </ClickCalendar>
           <DateNavigator />
-
           <Button onClick={() => console.log('clicou bloquear horario')}>BLOQUEAR HORÁRIO</Button>
           <Button marginLeft="30px" onClick={() => console.log('clicou ir para comandas')}>
             IR PARA COMANDAS
           </Button>
         </HeaderContentContainer>
+        <ProfilePicContainer>
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+          <ProfilePic
+            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
+            name={'doguinho'}
+          />
+        </ProfilePicContainer>
         <CalendarSchedule />
       </ContentContainer>
     </Container>
