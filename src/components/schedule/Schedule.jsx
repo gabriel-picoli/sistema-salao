@@ -7,7 +7,7 @@ import { FaCalendarAlt } from 'react-icons/fa'
 import H2 from '../tipography/H2'
 import Button from '../inputs/Button'
 import DateNavigator from './DateNavigator'
-import Calendar from '../calendar/Calendar'
+import CalendarSchedule from '../calendar/CalendarSchedule'
 
 const Container = styled.div`
   display: flex;
@@ -71,7 +71,7 @@ export default function Schedule() {
             IR PARA COMANDAS
           </Button>
         </HeaderContentContainer>
-        <Calendar />
+        <CalendarSchedule />
       </ContentContainer>
     </Container>
   )
