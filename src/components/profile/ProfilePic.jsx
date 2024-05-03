@@ -9,11 +9,11 @@ const Container = styled.div`
 const Image = styled.img`
   background: url('${(props) => props.image}');
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   border-radius: 50px;
-  width: 65px;
-  height: 65px;
+  width: 70px;
+  height: 70px;
 `
 
 const Name = styled.span`
