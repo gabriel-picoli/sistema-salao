@@ -1,4 +1,7 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
+
+import styled from 'styled-components'
+import { v4 as uuidv4 } from 'uuid'
 
 import Calendar from '@event-calendar/core'
 import TimeGrid from '@event-calendar/time-grid'
@@ -6,8 +9,6 @@ import Interaction from '@event-calendar/interaction'
 import List from '@event-calendar/list'
 import Resource from '@event-calendar/resource-time-grid'
 import '@event-calendar/core/index.css'
-
-import styled from 'styled-components'
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -52,28 +53,38 @@ const StyledCalendarWrapper = styled.div`
   }
 `
 
-export default function CalendarSchedule() {
-  // armazena a data e hora atuais no calendario
-  const selectedDate = useRef(new Date())
+const CalendarSchedule = () => {
+  const [events, setEvents] = useState([])
+  const ecRef = useRef(null)
 
   useEffect(() => {
-    const ec = new Calendar({
+    initializeCalendar()
+  }, []) // Executa apenas uma vez no carregamento inicial
+
+  useEffect(() => {
+    // Atualiza o calendário sempre que houver mudança nos eventos
+    if (ecRef.current) {
+      ecRef.current.setOption('events', events)
+    }
+  }, [events])
+
+  const initializeCalendar = () => {
+    ecRef.current = new Calendar({
       target: document.getElementById('ec'),
       props: {
         plugins: [TimeGrid, Interaction, List, Resource],
         options: {
-          date: selectedDate.current,
           view: 'resourceTimeGridDay',
           allDaySlot: false,
-          slotMinTime: '06:00:00',
-          slotMaxTime: '21:30:00',
+          slotMinTime: '07:00:00',
+          slotMaxTime: '23:00:00',
           headerToolbar: {
             start: '',
             center: '',
             end: ''
           },
           pointer: true,
-          events: [],
+          events,
           resources: [
             { id: '1', title: 'gab' },
             { id: '2', title: 'gab' },
@@ -85,15 +96,30 @@ export default function CalendarSchedule() {
             { id: '8', title: 'gab' },
             { id: '9', title: 'gab' },
             { id: '10', title: 'gab' }
-          ]
+          ],
+          dateClick: (info) => {
+            const clickedResourceId = info.resource.id
+            const clickedDate = new Date(info.dateStr)
+            addEvent({
+              start: clickedDate,
+              end: new Date(clickedDate.getTime() + 60 * 60 * 1000),
+              title: 'Novo Evento',
+              backgroundColor: `${(props) => props.theme.colors.primary}`,
+              resourceId: clickedResourceId
+            })
+          }
         }
       }
     })
+  }
 
-    return () => {
-      ec.destroy()
+  const addEvent = (eventData) => {
+    const newEvent = {
+      id: uuidv4(),
+      ...eventData
     }
-  }, [])
+    setEvents((prevEvents) => [...prevEvents, newEvent])
+  }
 
   return (
     <StyledWrapper>
@@ -101,3 +127,5 @@ export default function CalendarSchedule() {
     </StyledWrapper>
   )
 }
+
+export default CalendarSchedule
