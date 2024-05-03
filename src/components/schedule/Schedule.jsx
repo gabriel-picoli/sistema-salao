@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+
 import { FaCalendarAlt } from 'react-icons/fa'
+
+import styled from 'styled-components'
+
 import H2 from '../tipography/H2'
 import Button from '../inputs/Button'
 import DateNavigator from './DateNavigator'
@@ -41,11 +44,11 @@ const ProfilePicContainer = styled.div`
   grid-template-columns: repeat(10, 1fr);
   align-items: center;
   justify-items: center;
-  margin-top: 40px;
+  margin-top: 50px;
   margin-bottom: -30px;
   width: 100%;
-  padding-left: 80px;
-  padding-right: 20px;
+  padding-left: 90px;
+  padding-right: 25px;
 `
 
 export default function Schedule() {
@@ -79,44 +82,44 @@ export default function Schedule() {
         </HeaderContentContainer>
         <ProfilePicContainer>
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Pami'}
           />
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Maria'}
           />
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Leti'}
           />
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Charline'}
           />
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Ange'}
           />
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Carla'}
           />
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Evilin'}
           />
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Juli'}
           />
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Bruna'}
           />
           <ProfilePic
-            image={'https://i.pinimg.com/550x/7e/31/23/7e31237be7a4fa653864720072eef983.jpg'}
-            name={'doguinho'}
+            image={'https://parisdecor.com.br/wp-content/uploads/2020/06/Slide79.jpg'}
+            name={'Sala'}
           />
         </ProfilePicContainer>
         <CalendarSchedule />
