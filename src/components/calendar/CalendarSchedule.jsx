@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useRef, useEffect, useState } from 'react'
 
 import styled from 'styled-components'
@@ -53,20 +54,20 @@ const StyledCalendarWrapper = styled.div`
   }
 `
 
-const CalendarSchedule = () => {
+export default function CalendarSchedule({ currentDate }) {
   const [events, setEvents] = useState([])
   const ecRef = useRef(null)
 
   useEffect(() => {
     initializeCalendar()
-  }, []) // Executa apenas uma vez no carregamento inicial
+  }, []) // executa apenas uma vez no carregamento inicial
 
   useEffect(() => {
-    // Atualiza o calendário sempre que houver mudança nos eventos
     if (ecRef.current) {
       ecRef.current.setOption('events', events)
+      ecRef.current.setOption('date', currentDate) // atualiza a data quando a propriedade currentDate mudar
     }
-  }, [events])
+  }, [events, currentDate])
 
   const initializeCalendar = () => {
     ecRef.current = new Calendar({
@@ -76,8 +77,8 @@ const CalendarSchedule = () => {
         options: {
           view: 'resourceTimeGridDay',
           allDaySlot: false,
-          slotMinTime: '07:00:00',
-          slotMaxTime: '23:00:00',
+          slotMinTime: '06:00:00',
+          slotMaxTime: '21:30:00',
           headerToolbar: {
             start: '',
             center: '',
@@ -102,7 +103,7 @@ const CalendarSchedule = () => {
             const clickedDate = new Date(info.dateStr)
             addEvent({
               start: clickedDate,
-              end: new Date(clickedDate.getTime() + 60 * 60 * 1000),
+              duration: 60 * 60 * 1000, // define a duração do evento para 1 hora (60 minutos * 60 segundos * 1000 milissegundos)
               title: 'Novo Evento',
               backgroundColor: `${(props) => props.theme.colors.primary}`,
               resourceId: clickedResourceId
@@ -114,9 +115,13 @@ const CalendarSchedule = () => {
   }
 
   const addEvent = (eventData) => {
+    const { start, duration, ...rest } = eventData // recebe a duração como parte dos dados do evento
+    const end = new Date(start.getTime() + duration) // calcula o final com base na duração
     const newEvent = {
       id: uuidv4(),
-      ...eventData
+      start,
+      end,
+      ...rest
     }
     setEvents((prevEvents) => [...prevEvents, newEvent])
   }
@@ -127,5 +132,3 @@ const CalendarSchedule = () => {
     </StyledWrapper>
   )
 }
-
-export default CalendarSchedule
