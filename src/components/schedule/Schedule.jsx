@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react'
 
 import { FaCalendarAlt } from 'react-icons/fa'
@@ -9,6 +10,7 @@ import Button from '../inputs/Button'
 import DateNavigator from './DateNavigator'
 import CalendarSchedule from '../calendar/CalendarSchedule'
 import ProfilePic from '../profile/ProfilePic'
+import CalendarModal from '../calendar/CalendarModal'
 
 const Container = styled.div`
   display: flex;
@@ -53,7 +55,12 @@ const ProfilePicContainer = styled.div`
 
 export default function Schedule() {
   const [hovered, setHovered] = useState(false)
+  const [currentDate, setCurrentDate] = useState(new Date()) // inicializa a data atual
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const handleModalToggle = () => {
+    setIsModalOpen(!isModalOpen)
+  }
   return (
     <Container>
       <ContentContainer>
@@ -62,7 +69,7 @@ export default function Schedule() {
           <ClickCalendar
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            onClick={() => console.log('clicou calendario')}
+            onClick={handleModalToggle} // Alterando para abrir/fechar o modal
           >
             <FaCalendarAlt
               size={35}
@@ -74,7 +81,15 @@ export default function Schedule() {
               }}
             />
           </ClickCalendar>
-          <DateNavigator />
+          <DateNavigator currentDate={currentDate} setCurrentDate={setCurrentDate} />
+          {isModalOpen && (
+            <CalendarModal
+              isOpen={isModalOpen}
+              onClose={handleModalToggle}
+              currentDate={currentDate}
+            />
+          )}
+
           <Button onClick={() => console.log('clicou bloquear horario')}>BLOQUEAR HORÁRIO</Button>
           <Button marginLeft="30px" onClick={() => console.log('clicou ir para comandas')}>
             IR PARA COMANDAS
@@ -122,7 +137,7 @@ export default function Schedule() {
             name={'Sala'}
           />
         </ProfilePicContainer>
-        <CalendarSchedule />
+        <CalendarSchedule currentDate={currentDate} />
       </ContentContainer>
     </Container>
   )
