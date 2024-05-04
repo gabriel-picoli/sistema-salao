@@ -1,6 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { useState } from 'react'
-
 import styled from 'styled-components'
 
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
@@ -23,29 +21,32 @@ const StyledArrowSpan = styled.span`
   margin: 0 8px;
 `
 
-export default function DateNavigator() {
-  // inicializa data atual
-  const currentDate = new Date()
-  const [date, setDate] = useState(currentDate)
-
-  // funçao para avançar um dia
-  const nextDay = () => {
-    const nextDate = new Date(date)
-    nextDate.setDate(date.getDate() + 1)
-    setDate(nextDate)
+export default function DateNavigator({ currentDate, setCurrentDate }) {
+  // se o currentDate nao estiver definindo, define como uma nova data
+  if (!currentDate) {
+    currentDate = new Date()
+    setCurrentDate(currentDate) // atualiza o estado com a nova data
   }
 
-  // funçao para voltar um dia
+  // função para avançar um dia
+  const nextDay = () => {
+    const nextDate = new Date(currentDate)
+    nextDate.setDate(currentDate.getDate() + 1)
+    setCurrentDate(nextDate) // Atualiza a data atual
+  }
+
+  // função para voltar um dia
   const prevDay = () => {
-    const prevDate = new Date(date)
-    prevDate.setDate(date.getDate() - 1)
-    setDate(prevDate)
+    const prevDate = new Date(currentDate)
+    prevDate.setDate(currentDate.getDate() - 1)
+    setCurrentDate(prevDate) // Atualiza a data atual
   }
 
   // data formatada para - "dia" de "mes"
-  const formattedDate = `${date.getDate()} de ${date.toLocaleDateString('pt-br', {
-    month: 'long'
-  })}`
+  // certifica se currentDate não esta undefined antes de usar seus metodos
+  const formattedDate = currentDate
+    ? `${currentDate.getDate()} de ${currentDate.toLocaleDateString('pt-br', { month: 'long' })}`
+    : ''
 
   return (
     <StyledArrowContainer>
