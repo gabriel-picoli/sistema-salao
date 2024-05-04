@@ -18,7 +18,7 @@ const Image = styled.img`
 
 const Name = styled.span`
   margin-top: 5px;
-  font-size: 14px;
+  font-size: 15px;
 `
 
 export default function ProfilePic({ image, name }) {
