@@ -10,7 +10,7 @@ import Button from '../inputs/Button'
 import DateNavigator from './DateNavigator'
 import CalendarSchedule from '../calendar/CalendarSchedule'
 import ProfilePic from '../profile/ProfilePic'
-import CalendarModal from '../calendar/CalendarModal'
+import CalendarModal from '../modals/CalendarModal'
 
 const Container = styled.div`
   display: flex;
@@ -49,8 +49,8 @@ const ProfilePicContainer = styled.div`
   margin-top: 50px;
   margin-bottom: -30px;
   width: 100%;
-  padding-left: 90px;
-  padding-right: 25px;
+  padding-left: 100px;
+  padding-right: 23px;
 `
 
 export default function Schedule() {
@@ -61,6 +61,7 @@ export default function Schedule() {
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen)
   }
+
   return (
     <Container>
       <ContentContainer>
