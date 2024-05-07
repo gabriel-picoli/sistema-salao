@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
+
 import CalendarModal from '../modals/CalendarModal'
 
 const DateInputContainer = styled.div`
@@ -7,7 +8,6 @@ const DateInputContainer = styled.div`
 `
 
 const CustomDateInput = styled.input`
-  /* Estilos para o campo de entrada de data */
   width: 150px;
   padding: 8px;
   border: 1px solid #ccc;
@@ -19,13 +19,12 @@ export default function DatePicker() {
   const [selectedDate, setSelectedDate] = useState(null)
 
   const handleInputChange = () => {
-    setIsCalendarOpen(isCalendarOpen)
-    console.log('Input clicked')
+    setIsCalendarOpen(!isCalendarOpen)
   }
 
   const handleDateSelect = (date) => {
     setSelectedDate(date)
-    setIsCalendarOpen(false)
+    setIsCalendarOpen(false) // Fechar o calendário após a seleção
   }
 
   return (
@@ -33,7 +32,7 @@ export default function DatePicker() {
       <CustomDateInput
         type="text"
         value={selectedDate ? selectedDate.toLocaleDateString() : ''}
-        readOnly
+        readOnly // Impede que o usuário digite manualmente a data
         onClick={handleInputChange}
       />
       <CalendarModal
