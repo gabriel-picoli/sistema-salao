@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import H2 from '../tipography/H2'
 import Button from '../inputs/Button'
-import DateNavigator from './DateNavigator'
+import DateNavigator from '../calendar/DateNavigator'
 import CalendarSchedule from '../calendar/CalendarSchedule'
 import ProfilePic from '../profile/ProfilePic'
 import CalendarModal from '../modals/CalendarModal'
