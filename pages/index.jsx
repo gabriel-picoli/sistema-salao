@@ -1,7 +1,9 @@
+import { useState } from 'react'
+
+import EventModal from '../src/components/modals/EventModal'
+
 export default function HomePage() {
-  return (
-    <div>
-      <h1>alo</h1>
-    </div>
-  )
+  const [modalVisible, setModalVisible] = useState(true)
+
+  return <EventModal open={modalVisible} onClose={setModalVisible} />
 }
