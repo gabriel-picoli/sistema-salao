@@ -17,6 +17,7 @@ const ModalContent = styled.div`
   border-radius: 8px;
   padding: 20px;
   width: 800px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   outline: none;
