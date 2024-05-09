@@ -8,7 +8,8 @@ const ModalContainer = styled.div`
   z-index: 999;
   position: absolute;
   margin-top: 330px;
-  left: 35%;
+  left: ${(props) => props.left || '34.5%'};
+  bottom: ${(props) => props.bottom || '40%'};
   background-color: #fff;
   padding: 40px;
   border-radius: 10px;
@@ -60,7 +61,7 @@ const Day = styled.div`
   ${({ isToday }) => isToday && 'border: 1px solid #64BAB8;'}
 `
 
-export default function CalendarModal({ isOpen, onClose }) {
+export default function CalendarModal({ isOpen, onClose, left, bottom }) {
   const modalRef = useRef(null)
   const [selectedDate, setSelectedDate] = useState(null)
   const [displayedDate, setDisplayedDate] = useState(new Date())
@@ -149,5 +150,13 @@ export default function CalendarModal({ isOpen, onClose }) {
     )
   }
 
-  return <>{isOpen && <ModalContainer ref={modalRef}>{renderCalendar()}</ModalContainer>}</>
+  return (
+    <>
+      {isOpen && (
+        <ModalContainer ref={modalRef} left={left} bottom={bottom}>
+          {renderCalendar()}
+        </ModalContainer>
+      )}
+    </>
+  )
 }
