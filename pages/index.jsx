@@ -23,7 +23,7 @@ const FirstContentContainer = styled.div`
 const SecondContentContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `
 
 const DatePickerContainer = styled.div`
@@ -38,7 +38,7 @@ const ClickCalendar = styled.div`
 
 const SeparatorLine = styled.div`
   height: 0.5;
-  border: 0.5px solid #646464;
+  border: 0.5px solid #4e4e4e;
 `
 
 export default function HomePage() {
