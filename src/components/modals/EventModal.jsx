@@ -1,72 +1,68 @@
-import { Modal } from '@mui/material'
 import styled from 'styled-components'
 
-import Input from '../inputs/Input'
-import H3 from '../tipography/H3'
-import Button from '../inputs/Button'
-import DatePicker from '../calendar/DatePicker'
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 
-const StyledModal = styled(Modal)`
+import H3 from '../tipography/H3'
+
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #11111136;
+  z-index: 1000;
+`
+
+const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: ${(props) => props.theme.colors.white};
+  width: ${(props) => props.width || '950px'};
+  height: ${(props) => props.height || '300px'};
+  border-radius: 5px;
+  padding: 15px 20px;
+`
+const HeaderContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `
 
-const ModalContent = styled.div`
-  background-color: aliceblue;
-  border-radius: 8px;
-  padding: 20px;
-  width: 800px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  outline: none;
+const CloseButton = styled.button`
+  background-color: transparent;
   border: none;
-`
-
-const HeaderContainer = styled.div`
+  outline: none;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  color: ${(props) => props.theme.colors.primary};
   display: flex;
+  align-items: flex-end;
+
+  :hover {
+    color: ${(props) => props.theme.colors.hoverPrimary};
+  }
 `
 
-const ClientContent = styled.div`
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-`
+export default function EventModal({ isOpen, onClose, children, width, height, title }) {
+  if (isOpen) {
+    return (
+      <ModalBackground>
+        <ModalContainer width={width} height={height}>
+          <HeaderContainer>
+            <H3>{title}</H3>
+            <CloseButton onClick={onClose}>
+              <CloseOutlinedIcon style={{ width: 35, height: 35 }} />
+            </CloseButton>
+          </HeaderContainer>
+          <div>{children}</div>
+        </ModalContainer>
+      </ModalBackground>
+    )
+  }
 
-const DateContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-
-const CustomModal = ({ open, onClose }) => {
-  return (
-    <StyledModal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="modal-title"
-      aria-describedby="modal-description"
-    >
-      <ModalContent>
-        <HeaderContainer>
-          <H3>Agendamento</H3>
-        </HeaderContainer>
-        <ClientContent>
-          <Input placeholder="Cliente" width="550px" />
-          <Button width="180px" height="43px" textWidth="100%">
-            CADASTRAR NOVO
-          </Button>
-        </ClientContent>
-        <DateContainer>
-          <DatePicker />
-          <Button width="130px" height="43px">
-            WHATSAPP
-          </Button>
-        </DateContainer>
-      </ModalContent>
-    </StyledModal>
-  )
+  return null
 }
-
-export default CustomModal
