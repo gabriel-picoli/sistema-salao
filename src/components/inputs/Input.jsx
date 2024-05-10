@@ -8,6 +8,8 @@ const StyledInput = styled.input`
   border-radius: 5px;
   padding: 10px;
   font-size: 14px;
+  color: ${(props) => props.theme.colors.black};
+  margin-right: ${(props) => props.marginRight || '0px'};
 
   outline: none;
 
@@ -16,8 +18,10 @@ const StyledInput = styled.input`
   }
 `
 
-const Input = ({ placeholder, width, value }) => {
-  return <StyledInput placeholder={placeholder} width={width} value={value} />
+const Input = ({ placeholder, width, value, marginRight }) => {
+  return (
+    <StyledInput placeholder={placeholder} width={width} value={value} marginRight={marginRight} />
+  )
 }
 
 export default Input

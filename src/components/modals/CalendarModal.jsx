@@ -5,7 +5,7 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import styled from 'styled-components'
 
 const ModalContainer = styled.div`
-  z-index: 999;
+  z-index: 1000;
   position: absolute;
   margin-top: 330px;
   left: ${(props) => props.left || '34.5%'};
