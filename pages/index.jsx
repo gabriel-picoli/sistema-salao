@@ -41,6 +41,7 @@ const SeparatorLine = styled.div`
   height: 0.5;
   border: 0.5px solid #4e4e4e;
   margin-bottom: 20px;
+  margin-top: 5px;
 `
 
 const InfoServicesContainer = styled.div`
