@@ -101,10 +101,12 @@ export default function CalendarSchedule({ currentDate }) {
           dateClick: (info) => {
             const clickedResourceId = info.resource.id
             const clickedDate = new Date(info.dateStr)
+            console.log(info.resource.id)
             addEvent({
               start: clickedDate,
+              user_id: clickedResourceId,
               duration: 60 * 60 * 1000, // define a duração do evento para 1 hora (60 minutos * 60 segundos * 1000 milissegundos)
-              title: 'Novo Evento',
+              title: 'novo evento',
               backgroundColor: `${(props) => props.theme.colors.primary}`,
               resourceId: clickedResourceId
             })
