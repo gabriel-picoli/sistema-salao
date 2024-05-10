@@ -91,8 +91,14 @@ export default function Schedule() {
             />
           )}
 
-          <Button onClick={() => console.log('clicou bloquear horario')}>BLOQUEAR HORÁRIO</Button>
-          <Button marginLeft="30px" onClick={() => console.log('clicou ir para comandas')}>
+          <Button height="48px" onClick={() => console.log('clicou bloquear horario')}>
+            BLOQUEAR HORÁRIO
+          </Button>
+          <Button
+            marginLeft="30px"
+            height="48px"
+            onClick={() => console.log('clicou ir para comandas')}
+          >
             IR PARA COMANDAS
           </Button>
         </HeaderContentContainer>
