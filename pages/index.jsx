@@ -9,6 +9,7 @@ import Input from '../src/components/inputs/Input'
 import Button from '../src/components/inputs/Button'
 import CalendarModal from '../src/components/modals/CalendarModal'
 import Dropdown from '../src/components/inputs/Dropdown'
+import ClientStatusButton from '../src/components/inputs/ClientStatusButton'
 
 const ContentContainer = styled.div`
   display: flex;
@@ -92,6 +93,12 @@ const AddServiceContainer = styled.div`
     color: ${(props) => props.theme.colors.hoverPrimary};
     background-color: #c9c9c96a;
   }
+`
+
+const ClientStatusButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
 `
 
 const AddText = styled.p`
@@ -184,6 +191,15 @@ export default function HomePage() {
             <AddRoundedIcon style={{ width: 30, height: 30 }} />
             <AddText>Adicionar Serviço</AddText>
           </AddServiceContainer>
+          <ClientStatusButtonContainer>
+            <ClientStatusButton status="confirmed">Confirmado</ClientStatusButton>
+            <ClientStatusButton status="scheduled">Agendado</ClientStatusButton>
+            <ClientStatusButton status="waiting-command">Esp. Comanda</ClientStatusButton>
+            <ClientStatusButton status="concluded">Concluído</ClientStatusButton>
+            <ClientStatusButton status="late">Atrasado</ClientStatusButton>
+            <ClientStatusButton status="in-progress">Em andamento</ClientStatusButton>
+            <ClientStatusButton status="canceled">Cancelado</ClientStatusButton>
+          </ClientStatusButtonContainer>
         </ContentContainer>
       </EventModal>
     </>
