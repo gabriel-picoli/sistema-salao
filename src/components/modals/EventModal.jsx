@@ -22,6 +22,7 @@ const ModalContainer = styled.div`
   background-color: ${(props) => props.theme.colors.white};
   width: ${(props) => props.width || '1090px'};
   min-height: ${(props) => props.minHeight || '300px'};
+  max-height: ${(props) => props.maxHeigth || '650px'};
   overflow: auto;
   border-radius: 5px;
   padding: 20px 30px;
