@@ -116,8 +116,7 @@ const FooterButtonsContainer = styled.div`
   width: 100%;
 `
 
-export default function EventModal() {
-  const [openModal, setOpenModal] = useState(false)
+export default function EventModal({ isOpen, onClose }) {
   const [openCalendarModal, setOpenCalendarModal] = useState(false)
   const [servicesVisible, setServicesVisible] = useState([true]) // inicializa com um item visível
   const [hovered, setHovered] = useState(false)
@@ -132,97 +131,97 @@ export default function EventModal() {
   const handleAddServicesContainer = () => {
     setServicesVisible((prev) => [...prev, true])
   }
-
-  return (
-    <>
-      <button onClick={() => setOpenModal(true)}>abrir o modal</button>
-      <Modal isOpen={openModal} onClose={() => setOpenModal(false)} title="Agendamento">
-        <ContentContainer>
-          <FirstContentContainer>
-            <Input placeholder="Cliente" width="650px" />
-            <Button textWidth="100%" width="200px" height="42px">
-              CADASTRAR NOVO
-            </Button>
-          </FirstContentContainer>
-          <SecondContentContainer>
-            <DatePickerContainer>
-              <Input width="115px" placeholder="DD/MM/AAAA" />
-              <ClickCalendar
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-                onClick={() => setOpenCalendarModal(true)}
-              >
-                <FaCalendarAlt
-                  size={30}
-                  style={{
-                    color: hovered ? '#4d9291c5' : '#64BAB8',
-                    transition: 'color 0.2s ease-in-out'
-                  }}
+  if (isOpen) {
+    return (
+      <>
+        <Modal isOpen={isOpen} onClose={onClose} title="Agendamento">
+          <ContentContainer>
+            <FirstContentContainer>
+              <Input placeholder="Cliente" width="650px" />
+              <Button textWidth="100%" width="200px" height="42px">
+                CADASTRAR NOVO
+              </Button>
+            </FirstContentContainer>
+            <SecondContentContainer>
+              <DatePickerContainer>
+                <Input width="115px" placeholder="DD/MM/AAAA" />
+                <ClickCalendar
+                  onMouseEnter={() => setHovered(true)}
+                  onMouseLeave={() => setHovered(false)}
+                  onClick={() => setOpenCalendarModal(true)}
+                >
+                  <FaCalendarAlt
+                    size={30}
+                    style={{
+                      color: hovered ? '#4d9291c5' : '#64BAB8',
+                      transition: 'color 0.2s ease-in-out'
+                    }}
+                  />
+                </ClickCalendar>
+                <CalendarModal
+                  isOpen={openCalendarModal}
+                  onClose={() => setOpenCalendarModal(false)}
+                  left="15.5%"
+                  bottom="20%"
                 />
-              </ClickCalendar>
-              <CalendarModal
-                isOpen={openCalendarModal}
-                onClose={() => setOpenCalendarModal(false)}
-                left="15.5%"
-                bottom="20%"
-              />
-            </DatePickerContainer>
-            <Button textWidth="100%" width="130px" height="42px">
-              WHATSAPP
+              </DatePickerContainer>
+              <Button textWidth="100%" width="130px" height="42px">
+                WHATSAPP
+              </Button>
+            </SecondContentContainer>
+            <InfoServicesContainer>
+              <p style={{ marginRight: '185px' }}>Serviço</p>
+              <p style={{ marginRight: '148px' }}>Profissional</p>
+              <p style={{ marginRight: '75px' }}>Tempo</p>
+              <p style={{ marginRight: '98px' }}>Início</p>
+              <p style={{ marginRight: '110px' }}>Fim</p>
+              <p>Valor</p>
+            </InfoServicesContainer>
+            <SeparatorLine />
+            {servicesVisible.map((visible, index) => (
+              <InfoServicesInputsContainer key={index} visible={visible}>
+                <Dropdown options={services} text="Escolha um serviço" marginRight="40px" />
+                <Dropdown options={employees} text="Escolha um profissional" marginRight="40px" />
+                <Input width="90px" placeholder="Em mins" marginRight="40px" />
+                <Input width="100px" placeholder="07:30" marginRight="40px" />
+                <Input width="100px" placeholder="08:30" marginRight="40px" />
+                <Input width="150px" placeholder="R$ " marginRight="40px" isMoneyInput />
+                <CloseButton onClick={() => handleCloseServicesContainer(index)}>
+                  <CloseOutlinedIcon style={{ width: 23, height: 23 }} />
+                </CloseButton>
+              </InfoServicesInputsContainer>
+            ))}
+            <AddServiceContainer onClick={handleAddServicesContainer}>
+              <AddRoundedIcon style={{ width: 30, height: 30 }} />
+              <AddText>Adicionar Serviço</AddText>
+            </AddServiceContainer>
+            <p>Total a pagar</p>
+            <Input isMoneyInput placeholder="R$" />
+            <ClientStatusButtonContainer>
+              <ClientStatusButton status="confirmed">Confirmado</ClientStatusButton>
+              <ClientStatusButton status="scheduled">Agendado</ClientStatusButton>
+              <ClientStatusButton status="waiting-command">Esp. Comanda</ClientStatusButton>
+              <ClientStatusButton status="concluded">Concluído</ClientStatusButton>
+              <ClientStatusButton status="late">Atrasado</ClientStatusButton>
+              <ClientStatusButton status="in-progress">Em andamento</ClientStatusButton>
+              <ClientStatusButton status="canceled">Cancelado</ClientStatusButton>
+            </ClientStatusButtonContainer>
+          </ContentContainer>
+          <FooterButtonsContainer>
+            <Button
+              width="120px"
+              backgroundColor="#eee"
+              textColor="black"
+              hoverBackgroundColor="#c0c0c07f"
+            >
+              Cancelar
             </Button>
-          </SecondContentContainer>
-          <InfoServicesContainer>
-            <p style={{ marginRight: '185px' }}>Serviço</p>
-            <p style={{ marginRight: '148px' }}>Profissional</p>
-            <p style={{ marginRight: '75px' }}>Tempo</p>
-            <p style={{ marginRight: '98px' }}>Início</p>
-            <p style={{ marginRight: '110px' }}>Fim</p>
-            <p>Valor</p>
-          </InfoServicesContainer>
-          <SeparatorLine />
-          {servicesVisible.map((visible, index) => (
-            <InfoServicesInputsContainer key={index} visible={visible}>
-              <Dropdown options={services} text="Escolha um serviço" marginRight="40px" />
-              <Dropdown options={employees} text="Escolha um profissional" marginRight="40px" />
-              <Input width="90px" placeholder="Em mins" marginRight="40px" />
-              <Input width="100px" placeholder="07:30" marginRight="40px" />
-              <Input width="100px" placeholder="08:30" marginRight="40px" />
-              <Input width="150px" placeholder="R$ " marginRight="40px" isMoneyInput />
-              <CloseButton onClick={() => handleCloseServicesContainer(index)}>
-                <CloseOutlinedIcon style={{ width: 23, height: 23 }} />
-              </CloseButton>
-            </InfoServicesInputsContainer>
-          ))}
-          <AddServiceContainer onClick={handleAddServicesContainer}>
-            <AddRoundedIcon style={{ width: 30, height: 30 }} />
-            <AddText>Adicionar Serviço</AddText>
-          </AddServiceContainer>
-          <p>Total a pagar</p>
-          <Input isMoneyInput placeholder="R$" />
-          <ClientStatusButtonContainer>
-            <ClientStatusButton status="confirmed">Confirmado</ClientStatusButton>
-            <ClientStatusButton status="scheduled">Agendado</ClientStatusButton>
-            <ClientStatusButton status="waiting-command">Esp. Comanda</ClientStatusButton>
-            <ClientStatusButton status="concluded">Concluído</ClientStatusButton>
-            <ClientStatusButton status="late">Atrasado</ClientStatusButton>
-            <ClientStatusButton status="in-progress">Em andamento</ClientStatusButton>
-            <ClientStatusButton status="canceled">Cancelado</ClientStatusButton>
-          </ClientStatusButtonContainer>
-        </ContentContainer>
-        <FooterButtonsContainer>
-          <Button
-            width="120px"
-            backgroundColor="#eee"
-            textColor="black"
-            hoverBackgroundColor="#c0c0c07f"
-          >
-            Cancelar
-          </Button>
-          <Button width="120px" marginLeft="15px">
-            Confirmar
-          </Button>
-        </FooterButtonsContainer>
-      </Modal>
-    </>
-  )
+            <Button width="120px" marginLeft="15px">
+              Confirmar
+            </Button>
+          </FooterButtonsContainer>
+        </Modal>
+      </>
+    )
+  }
 }
