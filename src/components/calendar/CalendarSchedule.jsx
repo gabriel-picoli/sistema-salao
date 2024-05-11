@@ -1,15 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useRef, useEffect, useState } from 'react'
-
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
-
 import Calendar from '@event-calendar/core'
 import TimeGrid from '@event-calendar/time-grid'
 import Interaction from '@event-calendar/interaction'
 import List from '@event-calendar/list'
 import Resource from '@event-calendar/resource-time-grid'
 import '@event-calendar/core/index.css'
+import EventModal from '../modals/EventModal'
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -21,34 +19,27 @@ const StyledCalendarWrapper = styled.div`
   flex: 1;
   overflow: hidden;
   border-radius: 11px;
-
   .ec-content {
     background-color: transparent;
     border: 1px solid ${(props) => props.theme.colors.primary};
   }
-
   .ec-resource {
     border-left: 1.5px solid ${(props) => props.theme.colors.primary};
   }
-
   .ec-day {
     background-color: transparent;
     border: none;
   }
-
   .ec-time {
     border: none;
   }
-
   .ec-line {
     display: none;
   }
-
   .ec-header {
     display: none;
     border: none;
   }
-
   .ec-event {
     background-color: ${(props) => props.theme.colors.primary};
   }
@@ -56,7 +47,12 @@ const StyledCalendarWrapper = styled.div`
 
 export default function CalendarSchedule({ currentDate }) {
   const [events, setEvents] = useState([])
+  const [openModal, setOpenModal] = useState(false)
   const ecRef = useRef(null)
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
+  }
 
   useEffect(() => {
     initializeCalendar()
@@ -86,30 +82,9 @@ export default function CalendarSchedule({ currentDate }) {
           },
           pointer: true,
           events,
-          resources: [
-            { id: '1', title: 'gab' },
-            { id: '2', title: 'gab' },
-            { id: '3', title: 'gab' },
-            { id: '4', title: 'gab' },
-            { id: '5', title: 'gab' },
-            { id: '6', title: 'gab' },
-            { id: '7', title: 'gab' },
-            { id: '8', title: 'gab' },
-            { id: '9', title: 'gab' },
-            { id: '10', title: 'gab' }
-          ],
+          resources: Array.from({ length: 10 }, (_, i) => ({ id: String(i + 1), title: 'gab' })),
           dateClick: (info) => {
-            const clickedResourceId = info.resource.id
-            const clickedDate = new Date(info.dateStr)
-            console.log(info.resource.id)
-            addEvent({
-              start: clickedDate,
-              user_id: clickedResourceId,
-              duration: 60 * 60 * 1000, // define a duração do evento para 1 hora (60 minutos * 60 segundos * 1000 milissegundos)
-              title: 'novo evento',
-              backgroundColor: `${(props) => props.theme.colors.primary}`,
-              resourceId: clickedResourceId
-            })
+            setOpenModal(true)
           }
         }
       }
@@ -131,6 +106,7 @@ export default function CalendarSchedule({ currentDate }) {
   return (
     <StyledWrapper>
       <StyledCalendarWrapper id="ec" className="allAgenda" />
+      {openModal && <EventModal isOpen={openModal} onClose={handleCloseModal} />}
     </StyledWrapper>
   )
 }
