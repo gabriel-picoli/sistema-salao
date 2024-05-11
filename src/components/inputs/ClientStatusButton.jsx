@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 const StyledButton = styled.button`
-  box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.288);
+  box-shadow: 2px 1px 2px rgba(0, 0, 0, 0.288);
   min-width: 100px;
   max-width: 130px;
   height: 35px;
