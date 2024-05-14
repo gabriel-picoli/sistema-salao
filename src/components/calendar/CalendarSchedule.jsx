@@ -84,7 +84,7 @@ export default function CalendarSchedule({ currentDate }) {
           allDaySlot: false,
           slotMinTime: '06:00:00',
           slotMaxTime: '21:30:00',
-          headerToolBar: {
+          headerToolbar: {
             start: '',
             center: '',
             end: ''
