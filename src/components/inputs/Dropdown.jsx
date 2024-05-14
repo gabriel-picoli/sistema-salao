@@ -12,7 +12,7 @@ const DropdownButton = styled.button`
   padding: 10px;
   font-size: 14px;
   border: 2px solid #c1e3e3;
-  color: #999;
+  color: ${(props) => (props.selected ? props.theme.colors.black : '#999')};
   border-radius: 5px;
   cursor: pointer;
   display: flex;
@@ -76,7 +76,11 @@ const Dropdown = ({ options, text, dropdownWidth, listWidth, marginRight }) => {
 
   return (
     <DropdownContainer dropdownWidth={dropdownWidth} listWidth={listWidth} ref={dropdownRef}>
-      <DropdownButton onClick={toggleDropdown} marginRight={marginRight}>
+      <DropdownButton
+        onClick={toggleDropdown}
+        marginRight={marginRight}
+        selected={selectedOption !== null}
+      >
         {selectedOption || text}
         <ArrowDropDownIcon style={{ color: '#999' }} />
       </DropdownButton>
