@@ -24,41 +24,44 @@ const MoneyInputWrapper = styled.div`
   position: relative;
 `
 
-const MoneyInput = ({ placeholder, width, marginRight, isMoneyInput }) => {
+export default function Input({ placeholder, width, marginRight, isMoneyInput, type }) {
   const [value, setValue] = useState('')
 
   const handleInputChange = (event) => {
     let inputValue = event.target.value
 
-    // remove tudo exceto nemeros e o ponto decimal
-    inputValue = inputValue.replace(/[^0-9.]/g, '')
+    // verifica se o input eh para dinheiro e remove tudo exceto numeros e o ponto decimal
+    if (isMoneyInput) inputValue = inputValue.replace(/[^0-9.]/g, '')
 
-    // formata o valor de acordo com o padrao de moeda desejado, se for um input de dinheiro
+    // atualiza o estado com o valor original
+    setValue(inputValue)
+  }
+
+  const handleInputBlur = () => {
     if (isMoneyInput) {
-      // converte a string em numero (remove pontos e virgulas) e formata com duas casas decimais
-      const floatValue = parseFloat(inputValue.replace(/[.,]/g, '')) || 0
+      // formata o valor ao sair do input
+      const floatValue = parseFloat(value.replace(/[.,]/g, '')) || 0
       const formattedValue = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL'
       }).format(floatValue / 100) // divide por 100 para converter centavos em reais
+
+      // atualiza o estado com o valor formatado
       setValue(formattedValue)
-    } else {
-      setValue(inputValue)
     }
   }
 
   return (
     <MoneyInputWrapper>
       <StyledInput
-        type="text"
+        type={type}
         placeholder={placeholder}
         width={width}
         value={value}
         marginRight={marginRight}
         onChange={handleInputChange}
+        onBlur={handleInputBlur}
       />
     </MoneyInputWrapper>
   )
 }
-
-export default MoneyInput
