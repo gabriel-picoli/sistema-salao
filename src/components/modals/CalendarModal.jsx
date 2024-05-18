@@ -65,6 +65,7 @@ export default function CalendarModal({ isOpen, onClose, left, bottom }) {
   const modalRef = useRef(null)
   const [selectedDate, setSelectedDate] = useState(null)
   const [displayedDate, setDisplayedDate] = useState(new Date())
+  const [clickedDate, setClickedDate] = useState(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -84,6 +85,10 @@ export default function CalendarModal({ isOpen, onClose, left, bottom }) {
     }
   }, [isOpen, onClose])
 
+  useEffect(() => {
+    console.log('Data selecionada:', clickedDate)
+  }, [clickedDate])
+
   const daysInMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
   const startOfMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1).getDay()
 
@@ -96,7 +101,10 @@ export default function CalendarModal({ isOpen, onClose, left, bottom }) {
   }
 
   const handleDateClick = (day) => {
-    setSelectedDate(new Date(displayedDate.getFullYear(), displayedDate.getMonth(), day))
+    const clicked = new Date(displayedDate.getFullYear(), displayedDate.getMonth(), day)
+    setSelectedDate(clicked)
+    setClickedDate(`${day}/${displayedDate.getMonth() + 1}/${displayedDate.getFullYear()}`)
+    onClose() // fecha o calendario quando um dia for selecionado
   }
 
   const renderCalendar = () => {
