@@ -24,7 +24,7 @@ const MoneyInputWrapper = styled.div`
   position: relative;
 `
 
-export default function Input({ placeholder, width, marginRight, isMoneyInput, type }) {
+export default function Input({ placeholder, width, marginRight, isMoneyInput, type, readOnly }) {
   const [value, setValue] = useState('')
 
   const handleInputChange = (event) => {
@@ -57,10 +57,11 @@ export default function Input({ placeholder, width, marginRight, isMoneyInput, t
         type={type}
         placeholder={placeholder}
         width={width}
-        value={value}
+        readOnly={readOnly}
         marginRight={marginRight}
         onChange={handleInputChange}
         onBlur={handleInputBlur}
+        value={value}
       />
     </MoneyInputWrapper>
   )
