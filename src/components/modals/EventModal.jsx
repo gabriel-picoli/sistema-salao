@@ -114,11 +114,10 @@ export default function EventModal({ isOpen, onClose }) {
   const { handleSubmit, control, reset } = useForm()
 
   const onSubmit = (data) => {
-    console.log(data)
     data.services.forEach((service, index) => {
       console.log(`serviço ${index + 1}:`, service)
     })
-    // fechar o modal e resetar o formulário após a submissão
+    // fechar o modal e resetar o formulário apos a submissao
     // onClose()
     // reset()
   }
