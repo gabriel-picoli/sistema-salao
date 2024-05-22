@@ -94,7 +94,15 @@ export default function CalendarSchedule({ currentDate }) {
           // lista para criar 10 colunas, inicialmente ficticio
           resources: Array.from({ length: 10 }, (_, i) => ({ id: String(i + 1), title: 'gab' })),
           dateClick: (info) => {
-            setOpenModal(true) // abre o modal quando uma data eh clicada
+            const clickedResourceId = info.resource.id
+            const clickedDate = new Date(info.dateStr)
+            addEvent({
+              start: clickedDate,
+              end: new Date(clickedDate.getTime() + 60 * 60 * 1000),
+              title: 'Novo Evento',
+              backgroundColor: `${(props) => props.theme.colors.primary}`,
+              resourceId: clickedResourceId
+            })
           }
         }
       }
