@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Controller } from 'react-hook-form'
 
 import styled from 'styled-components'
 
@@ -12,7 +12,6 @@ const StyledInput = styled.input`
   font-size: 14px;
   color: ${(props) => props.theme.colors.black};
   margin-right: ${(props) => props.marginRight || '0px'};
-
   outline: none;
 
   &::placeholder {
@@ -24,45 +23,61 @@ const MoneyInputWrapper = styled.div`
   position: relative;
 `
 
-export default function Input({ placeholder, width, marginRight, isMoneyInput, type, readOnly }) {
-  const [value, setValue] = useState('')
-
-  const handleInputChange = (event) => {
-    let inputValue = event.target.value
-
-    // verifica se o input eh para dinheiro e remove tudo exceto numeros e o ponto decimal
-    if (isMoneyInput) inputValue = inputValue.replace(/[^0-9.]/g, '')
-
-    // atualiza o estado com o valor original
-    setValue(inputValue)
+export default function Input({
+  name,
+  control,
+  placeholder,
+  width,
+  marginRight,
+  isMoneyInput,
+  type,
+  readOnly
+}) {
+  const formatMoney = (value) => {
+    const floatValue = parseFloat(value.replace(/[^\d]/g, '')) || 0
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(floatValue / 100)
   }
 
-  const handleInputBlur = () => {
+  const handleInputChange = (event, onChange) => {
+    let inputValue = event.target.value
     if (isMoneyInput) {
-      // formata o valor ao sair do input
-      const floatValue = parseFloat(value.replace(/[.,]/g, '')) || 0
-      const formattedValue = new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-      }).format(floatValue / 100) // divide por 100 para converter centavos em reais
+      inputValue = inputValue.replace(/[^0-9]/g, '')
+    }
+    onChange(inputValue)
+  }
 
-      // atualiza o estado com o valor formatado
-      setValue(formattedValue)
+  const handleInputBlur = (event, onBlur) => {
+    if (isMoneyInput) {
+      const formattedValue = formatMoney(event.target.value)
+      onBlur(formattedValue)
+    } else {
+      onBlur(event)
     }
   }
 
   return (
-    <MoneyInputWrapper>
-      <StyledInput
-        type={type}
-        placeholder={placeholder}
-        width={width}
-        readOnly={readOnly}
-        marginRight={marginRight}
-        onChange={handleInputChange}
-        onBlur={handleInputBlur}
-        value={value}
-      />
-    </MoneyInputWrapper>
+    <Controller
+      name={name}
+      control={control}
+      defaultValue=""
+      render={({ field }) => (
+        <MoneyInputWrapper>
+          <StyledInput
+            {...field}
+            type={type}
+            placeholder={placeholder}
+            width={width}
+            readOnly={readOnly}
+            marginRight={marginRight}
+            onChange={(e) => handleInputChange(e, field.onChange)}
+            onBlur={(e) => handleInputBlur(e, field.onBlur)}
+            value={isMoneyInput ? formatMoney(field.value) : field.value}
+          />
+        </MoneyInputWrapper>
+      )}
+    />
   )
 }
