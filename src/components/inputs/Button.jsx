@@ -37,7 +37,8 @@ export default function Button({
   width,
   height,
   textWidth,
-  textColor
+  textColor,
+  type
 }) {
   return (
     <StyledButton
@@ -48,6 +49,7 @@ export default function Button({
       width={width}
       height={height}
       textColor={textColor}
+      type={type}
     >
       <ButtonText textWidth={textWidth}>{children}</ButtonText>
     </StyledButton>

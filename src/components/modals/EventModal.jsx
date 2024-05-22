@@ -131,6 +131,7 @@ export default function EventModal({ isOpen, onClose }) {
   const handleAddServicesContainer = () => {
     setServicesVisible((prev) => [...prev, true])
   }
+
   if (isOpen) {
     return (
       <>
@@ -216,7 +217,7 @@ export default function EventModal({ isOpen, onClose }) {
             >
               Cancelar
             </Button>
-            <Button width="120px" marginLeft="15px">
+            <Button width="120px" marginLeft="15px" type="submit">
               Confirmar
             </Button>
           </FooterButtonsContainer>
