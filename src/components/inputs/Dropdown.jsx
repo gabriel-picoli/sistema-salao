@@ -77,6 +77,7 @@ const Dropdown = ({ options, text, dropdownWidth, listWidth, marginRight }) => {
   return (
     <DropdownContainer dropdownWidth={dropdownWidth} listWidth={listWidth} ref={dropdownRef}>
       <DropdownButton
+        type="button"
         onClick={toggleDropdown}
         marginRight={marginRight}
         selected={selectedOption !== null}
