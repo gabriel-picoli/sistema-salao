@@ -1,10 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+
 import styled from 'styled-components'
+
 import { FaCalendarAlt } from 'react-icons/fa'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import AddRoundedIcon from '@mui/icons-material/AddRounded'
+
 import Modal from './Modal'
 import Input from '../inputs/Input'
 import Button from '../inputs/Button'
@@ -123,7 +126,7 @@ export default function EventModal({ isOpen, onClose }) {
   }
 
   const handleCloseServicesContainer = (index) => {
-    setServicesVisible((prev) => prev.filter((_, i) => i !== index))
+    setServicesVisible((prev) => prev.map((item, i) => (i === index ? false : item)))
   }
 
   const handleAddServicesContainer = () => {
