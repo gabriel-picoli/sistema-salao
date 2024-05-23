@@ -91,7 +91,7 @@ export default function ClientStatusButton({ children, status, onClick }) {
   }
 
   return (
-    <StyledButton status={status} isSelected={isSelected} onClick={handleClick}>
+    <StyledButton status={status} isSelected={isSelected} onClick={handleClick} type="button">
       {children}
     </StyledButton>
   )
