@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
+
+import { Controller } from 'react-hook-form'
 import styled from 'styled-components'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 const DropdownContainer = styled.div`
   position: relative;
   display: inline-block;
 `
 
-const DropdownButton = styled.button`
+const StyledDropdown = styled.select`
   background-color: transparent;
   padding: 10px;
   font-size: 14px;
@@ -21,77 +22,41 @@ const DropdownButton = styled.button`
   width: ${(props) => props.dropdownWidth || '200px'};
   height: 45px;
   margin-right: ${(props) => props.marginRight || '0px'};
+  outline: none;
 `
 
-const DropdownContent = styled.div`
-  display: ${(props) => (props.open ? 'block' : 'none')};
-  position: absolute;
-  background-color: ${(props) => props.theme.colors.white};
-  width: ${(props) => props.listWidth || '200px'};
-  max-height: 200px;
-  overflow: auto;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 999;
-  color: ${(props) => props.theme.colors.black};
-  font-size: 14px;
-`
+const Dropdown = ({ options, text, dropdownWidth, listWidth, marginRight, control }) => {
+  const [selectedOption, setSelectedOption] = useState('')
 
-const DropdownItem = styled.div`
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #c9c9c96a;
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value)
   }
-`
-
-const Dropdown = ({ options, text, dropdownWidth, listWidth, marginRight }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selectedOption, setSelectedOption] = useState(null)
-  const dropdownRef = useRef(null)
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen)
-  }
-
-  const handleOptionClick = (option) => {
-    setSelectedOption(option)
-    setIsOpen(false)
-  }
-
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsOpen(false)
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
 
   return (
-    <DropdownContainer dropdownWidth={dropdownWidth} listWidth={listWidth} ref={dropdownRef}>
-      <DropdownButton
-        type="button"
-        onClick={toggleDropdown}
-        marginRight={marginRight}
-        selected={selectedOption !== null}
-      >
-        {selectedOption || text}
-        <ArrowDropDownIcon style={{ color: '#999' }} />
-      </DropdownButton>
-      <DropdownContent open={isOpen}>
-        {options.map((option, index) => (
-          <DropdownItem key={index} onClick={() => handleOptionClick(option)}>
-            {option}
-          </DropdownItem>
-        ))}
-      </DropdownContent>
+    <DropdownContainer dropdownWidth={dropdownWidth} listWidth={listWidth}>
+      <Controller
+        name={text}
+        control={control}
+        defaultValue=""
+        render={({ field }) => (
+          <StyledDropdown
+            {...field}
+            onChange={handleOptionChange}
+            value={selectedOption}
+            marginRight={marginRight}
+            selected={selectedOption !== ''}
+          >
+            <option value="" disabled>
+              {text}
+            </option>
+            {options.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </StyledDropdown>
+        )}
+      />
     </DropdownContainer>
   )
 }
