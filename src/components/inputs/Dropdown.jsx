@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { Controller } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -25,27 +23,15 @@ const StyledDropdown = styled.select`
   outline: none;
 `
 
-const Dropdown = ({ options, text, dropdownWidth, listWidth, marginRight, control }) => {
-  const [selectedOption, setSelectedOption] = useState('')
-
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value)
-  }
-
+const Dropdown = ({ options, text, dropdownWidth, listWidth, marginRight, control, name }) => {
   return (
     <DropdownContainer dropdownWidth={dropdownWidth} listWidth={listWidth}>
       <Controller
-        name={text}
+        name={name}
         control={control}
         defaultValue=""
         render={({ field }) => (
-          <StyledDropdown
-            {...field}
-            onChange={handleOptionChange}
-            value={selectedOption}
-            marginRight={marginRight}
-            selected={selectedOption !== ''}
-          >
+          <StyledDropdown {...field} marginRight={marginRight} selected={field.value !== ''}>
             <option value="" disabled>
               {text}
             </option>
