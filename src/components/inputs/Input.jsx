@@ -19,10 +19,6 @@ const StyledInput = styled.input`
   }
 `
 
-const MoneyInputWrapper = styled.div`
-  position: relative;
-`
-
 export default function Input({
   name,
   control,
@@ -64,19 +60,17 @@ export default function Input({
       control={control}
       defaultValue=""
       render={({ field }) => (
-        <MoneyInputWrapper>
-          <StyledInput
-            {...field}
-            type={type}
-            placeholder={placeholder}
-            width={width}
-            readOnly={readOnly}
-            marginRight={marginRight}
-            onChange={(e) => handleInputChange(e, field.onChange)}
-            onBlur={(e) => handleInputBlur(e, field.onBlur)}
-            value={isMoneyInput ? formatMoney(field.value) : field.value}
-          />
-        </MoneyInputWrapper>
+        <StyledInput
+          {...field}
+          type={type}
+          placeholder={placeholder}
+          width={width}
+          readOnly={readOnly}
+          marginRight={marginRight}
+          onChange={(e) => handleInputChange(e, field.onChange)}
+          onBlur={(e) => handleInputBlur(e, field.onBlur)}
+          value={isMoneyInput ? formatMoney(field.value) : field.value}
+        />
       )}
     />
   )
