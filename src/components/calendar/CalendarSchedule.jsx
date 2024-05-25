@@ -51,11 +51,13 @@ const StyledCalendarWrapper = styled.div`
 export default function CalendarSchedule({ currentDate }) {
   const [events, setEvents] = useState([]) // armazena os eventos da agenda
   const [openModal, setOpenModal] = useState(false) // controla se o modal esta aberto ou fechado
+  const [clickedDate, setClickedDate] = useState(null) // armazena a data clicada
   const ecRef = useRef(null) // da referencia para a agenda quando inicializada
 
   // funçao para fechar o modal
   const handleCloseModal = () => {
     setOpenModal(false)
+    setClickedDate(null) // limpa a data clicada ao fechar o modal
   }
 
   // inicializa a agenda quando a pagina eh carregada
@@ -96,13 +98,8 @@ export default function CalendarSchedule({ currentDate }) {
           dateClick: (info) => {
             const clickedResourceId = info.resource.id
             const clickedDate = new Date(info.dateStr)
-            addEvent({
-              start: clickedDate,
-              end: new Date(clickedDate.getTime() + 60 * 60 * 1000),
-              title: 'Novo Evento',
-              backgroundColor: `${(props) => props.theme.colors.primary}`,
-              resourceId: clickedResourceId
-            })
+            setClickedDate(clickedDate)
+            setOpenModal(true)
           }
         }
       }
@@ -120,11 +117,14 @@ export default function CalendarSchedule({ currentDate }) {
     }
     setEvents((prevEvents) => [...prevEvents, newEvent]) // adiciona um novo evento ao estado de eventos
   }
+
   return (
     <StyledWrapper>
       <StyledCalendarWrapper id="ec" className="allAgenda" />
       {/* verifica se openModal eh verdadeiro, quando verdadeiro renderiza o modal */}
-      {openModal && <EventModal isOpen={openModal} onClose={handleCloseModal} />}
+      {openModal && (
+        <EventModal isOpen={openModal} onClose={handleCloseModal} initialDate={clickedDate} />
+      )}
     </StyledWrapper>
   )
 }
