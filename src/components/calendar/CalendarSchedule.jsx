@@ -1,15 +1,12 @@
 import { useRef, useEffect, useState } from 'react'
-
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
-
 import Calendar from '@event-calendar/core'
 import TimeGrid from '@event-calendar/time-grid'
 import Interaction from '@event-calendar/interaction'
 import List from '@event-calendar/list'
 import Resource from '@event-calendar/resource-time-grid'
 import '@event-calendar/core/index.css'
-
 import EventModal from '../modals/EventModal'
 
 const StyledWrapper = styled.div`
@@ -52,6 +49,7 @@ export default function CalendarSchedule({ currentDate }) {
   const [events, setEvents] = useState([]) // armazena os eventos da agenda
   const [openModal, setOpenModal] = useState(false) // controla se o modal esta aberto ou fechado
   const [clickedDate, setClickedDate] = useState(null) // armazena a data clicada
+  const [clickedResourceId, setClickedResourceId] = useState(null)
   const ecRef = useRef(null) // da referencia para a agenda quando inicializada
 
   // funçao para fechar o modal
@@ -68,9 +66,8 @@ export default function CalendarSchedule({ currentDate }) {
   // mantem a agenda atualizada
   useEffect(() => {
     if (ecRef.current) {
-      // verifica se a agenda ja foi inicializada
-      ecRef.current.setOption('events', events) // atualiza a lista de eventos
-      ecRef.current.setOption('date', currentDate) // atualiza a data
+      ecRef.current.setOption('events', events)
+      ecRef.current.setOption('date', currentDate)
     }
   }, [events, currentDate])
 
@@ -98,7 +95,12 @@ export default function CalendarSchedule({ currentDate }) {
           dateClick: (info) => {
             const clickedResourceId = info.resource.id
             const clickedDate = new Date(info.dateStr)
+
+            // Define o ID do recurso clicado no estado
+            setClickedResourceId(clickedResourceId)
             setClickedDate(clickedDate)
+
+            // Abre o modal
             setOpenModal(true)
           }
         }
@@ -107,15 +109,18 @@ export default function CalendarSchedule({ currentDate }) {
   }
 
   const addEvent = (eventData) => {
-    const { start, duration, ...rest } = eventData // desestrutura os dados do evento recebido como parametro
-    const end = new Date(start.getTime() + duration) // calcula o fim do evento com base na duraçao
+    console.log('evento adicionado:', eventData)
+
+    const { start, duration, ...rest } = eventData
+    const end = new Date(start.getTime() + duration)
     const newEvent = {
-      id: uuidv4(), // gera um id unico para o evento
-      start, // data de inicio
-      end, // data de termino
-      ...rest // quaisquer outras propriedades
+      id: uuidv4(),
+      start,
+      end,
+      ...rest
     }
-    setEvents((prevEvents) => [...prevEvents, newEvent]) // adiciona um novo evento ao estado de eventos
+
+    setEvents((prevEvents) => [...prevEvents, newEvent])
   }
 
   return (
@@ -123,7 +128,13 @@ export default function CalendarSchedule({ currentDate }) {
       <StyledCalendarWrapper id="ec" className="allAgenda" />
       {/* verifica se openModal eh verdadeiro, quando verdadeiro renderiza o modal */}
       {openModal && (
-        <EventModal isOpen={openModal} onClose={handleCloseModal} initialDate={clickedDate} />
+        <EventModal
+          isOpen={openModal}
+          onClose={handleCloseModal}
+          initialDate={clickedDate}
+          addEvent={addEvent}
+          clickedResourceId={clickedResourceId} // Certifique-se de passar clickedResourceId aqui
+        />
       )}
     </StyledWrapper>
   )
