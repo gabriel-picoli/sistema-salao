@@ -1,17 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-
 import styled from 'styled-components'
-
-import { FaCalendarAlt } from 'react-icons/fa'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import AddRoundedIcon from '@mui/icons-material/AddRounded'
-
 import Modal from './Modal'
 import Input from '../inputs/Input'
 import Button from '../inputs/Button'
-import CalendarModal from './CalendarModal'
 import Dropdown from '../inputs/Dropdown'
 import ClientStatusButton from '../inputs/ClientStatusButton'
 
@@ -37,10 +32,6 @@ const DatePickerContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
-`
-
-const ClickCalendar = styled.div`
-  cursor: pointer;
 `
 
 const SeparatorLine = styled.div`
@@ -118,23 +109,27 @@ const FooterButtonsContainer = styled.div`
   width: 100%;
 `
 
-export default function EventModal({ isOpen, onClose, initialDate, addEvent, clickedResourceId }) {
+export default function EventModal({
+  isOpen,
+  onClose,
+  initialDate,
+  addEvent,
+  selectedEvent,
+  clickedResourceId
+}) {
   const [openCalendarModal, setOpenCalendarModal] = useState(false)
   const [servicesVisible, setServicesVisible] = useState([true])
-  const [selectedServices, setSelectedServices] = useState(Array(servicesVisible.length).fill(null))
-  const [selectedDropdownValue, setSelectedDropdownValue] = useState(null)
-
-  const services = ['mechas', 'unhas', 'spa', 'mega hair']
-  const employees = ['pami', 'maria', 'juli', 'ange']
-
   const { handleSubmit, control, reset } = useForm()
+
+  const services = ['a', 'b', 'c', 'd', 'e']
+  const employees = ['1', '2', '3', '4', '5']
 
   useEffect(() => {
     if (initialDate) {
-      const startTime = initialDate.toISOString().substring(11, 16)
+      const startTime = initialDate.toTimeString().substring(0, 5)
       const endTime = new Date(initialDate.getTime() + 60 * 60 * 1000)
-        .toISOString()
-        .substring(11, 16)
+        .toTimeString()
+        .substring(0, 5)
       reset({
         'services[0].start': startTime,
         'services[0].end': endTime
@@ -142,20 +137,36 @@ export default function EventModal({ isOpen, onClose, initialDate, addEvent, cli
     }
   }, [initialDate, reset])
 
+  useEffect(() => {
+    if (selectedEvent) {
+      const { title, start, end, services, client } = selectedEvent
+
+      reset({
+        client,
+        date: start.toISOString().substr(0, 10),
+        services: services
+          ? services.map((service) => ({
+              ...service,
+              start: new Date(service.start).toTimeString().substring(0, 5),
+              end: new Date(service.end).toTimeString().substring(0, 5)
+            }))
+          : []
+      })
+
+      setServicesVisible(services ? Array(services.length).fill(true) : [])
+    }
+  }, [selectedEvent, reset])
+
   const onSubmit = (data) => {
     if (data.services && data.services.length > 0) {
       const startDate = new Date(initialDate)
       const [startHours, startMinutes] = data.services[0].start.split(':').map(Number)
       const [endHours, endMinutes] = data.services[0].end.split(':').map(Number)
 
-      // Criando a data inicial e final em UTC
-      startDate.setUTCHours(startHours, startMinutes)
+      startDate.setHours(startHours, startMinutes)
 
-      const endDate = new Date(initialDate)
-      endDate.setUTCHours(endHours, endMinutes)
-
-      // Calculando a duração
-      const duration = endDate.getTime() - startDate.getTime()
+      const endDate = new Date(startDate)
+      endDate.setHours(endHours, endMinutes)
 
       const formData = {
         client: data.client,
@@ -170,13 +181,11 @@ export default function EventModal({ isOpen, onClose, initialDate, addEvent, cli
       console.log('Form Data:', formData)
       console.log('Clicked Resource ID:', clickedResourceId)
 
-      // adiciona o evento no calendário
       addEvent({
         start: startDate,
-        duration,
-        title: ` ${data.client} - ${data.services[0].name}`,
+        end: endDate,
+        title: `${data.client} - ${data.services[0].name}`,
         user_id: clickedResourceId,
-        backgroundColor: `${(props) => props.theme.colors.primary}`,
         resourceId: clickedResourceId
       })
 
@@ -190,10 +199,6 @@ export default function EventModal({ isOpen, onClose, initialDate, addEvent, cli
 
   const handleAddServicesContainer = () => {
     setServicesVisible((prev) => [...prev, true])
-  }
-
-  const handleDropdownSelect = (value) => {
-    setSelectedDropdownValue(value)
   }
 
   if (isOpen) {
@@ -216,15 +221,6 @@ export default function EventModal({ isOpen, onClose, initialDate, addEvent, cli
                   placeholder="DD/MM/AAAA"
                   type="date"
                 />
-                {/* <ClickCalendar onClick={() => setOpenCalendarModal(true)}>
-                  <FaCalendarAlt size={30} style={{ color: '#64BAB8' }} />
-                </ClickCalendar>
-                <CalendarModal
-                  isOpen={openCalendarModal}
-                  onClose={() => setOpenCalendarModal(false)}
-                  left="15.5%"
-                  bottom="20%"
-                /> */}
               </DatePickerContainer>
               <Button textWidth="100%" width="130px" height="42px">
                 WHATSAPP
@@ -245,24 +241,15 @@ export default function EventModal({ isOpen, onClose, initialDate, addEvent, cli
                   options={services}
                   control={control}
                   text="serviço"
+                  name={`services[${index}].name`}
                   marginRight="40px"
-                  onOptionSelect={handleDropdownSelect}
-                  onChange={(selectedOption) => {
-                    const updatedServices = [...selectedServices]
-                    updatedServices[index] = selectedOption
-                    setSelectedServices(updatedServices)
-                  }}
                 />
                 <Dropdown
                   options={employees}
                   control={control}
                   text="funcionário"
+                  name={`services[${index}].employee`}
                   marginRight="40px"
-                  onChange={(selectedOption) => {
-                    const updatedServices = [...selectedServices]
-                    updatedServices[index] = selectedOption
-                    setSelectedServices(updatedServices)
-                  }}
                 />
                 <Input
                   name={`services[${index}].time`}
