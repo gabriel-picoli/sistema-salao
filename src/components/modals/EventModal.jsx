@@ -118,7 +118,7 @@ const FooterButtonsContainer = styled.div`
   width: 100%;
 `
 
-export default function EventModal({ isOpen, onClose, initialDate }) {
+export default function EventModal({ isOpen, onClose, initialDate, addEvent, clickedResourceId }) {
   const [openCalendarModal, setOpenCalendarModal] = useState(false)
   const [servicesVisible, setServicesVisible] = useState([true])
   const [selectedServices, setSelectedServices] = useState(Array(servicesVisible.length).fill(null))
@@ -143,22 +143,45 @@ export default function EventModal({ isOpen, onClose, initialDate }) {
   }, [initialDate, reset])
 
   const onSubmit = (data) => {
-    const formData = {
-      client: data.client,
-      date: data.date,
-      services: data.services.map((service) => ({
-        name: service.name,
-        employee: service.employee,
-        time: service.time,
-        start: service.start,
-        end: service.end,
-        value: service.value
-      })),
-      total: data.total
-    }
+    if (data.services && data.services.length > 0) {
+      const startDate = new Date(initialDate)
+      const [startHours, startMinutes] = data.services[0].start.split(':').map(Number)
+      const [endHours, endMinutes] = data.services[0].end.split(':').map(Number)
 
-    // exiba o objeto no console
-    console.log('dados do form:', formData)
+      // Criando a data inicial e final em UTC
+      startDate.setUTCHours(startHours, startMinutes)
+
+      const endDate = new Date(initialDate)
+      endDate.setUTCHours(endHours, endMinutes)
+
+      // Calculando a duração
+      const duration = endDate.getTime() - startDate.getTime()
+
+      const formData = {
+        client: data.client,
+        date: data.date,
+        services: data.services.map((service) => ({
+          ...service,
+          start: new Date(startDate),
+          end: new Date(endDate)
+        }))
+      }
+
+      console.log('Form Data:', formData)
+      console.log('Clicked Resource ID:', clickedResourceId)
+
+      // adiciona o evento no calendário
+      addEvent({
+        start: startDate,
+        duration,
+        title: ` ${data.client} - ${data.services[0].name}`,
+        user_id: clickedResourceId,
+        backgroundColor: `${(props) => props.theme.colors.primary}`,
+        resourceId: clickedResourceId
+      })
+
+      onClose()
+    }
   }
 
   const handleCloseServicesContainer = (index) => {
@@ -221,7 +244,7 @@ export default function EventModal({ isOpen, onClose, initialDate }) {
                 <Dropdown
                   options={services}
                   control={control}
-                  text="Escolha um serviço"
+                  text="serviço"
                   marginRight="40px"
                   onOptionSelect={handleDropdownSelect}
                   onChange={(selectedOption) => {
@@ -233,7 +256,7 @@ export default function EventModal({ isOpen, onClose, initialDate }) {
                 <Dropdown
                   options={employees}
                   control={control}
-                  text="Escolha um funcionário"
+                  text="funcionário"
                   marginRight="40px"
                   onChange={(selectedOption) => {
                     const updatedServices = [...selectedServices]
