@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import styled from 'styled-components'
@@ -20,41 +20,49 @@ const ContentContainer = styled.div`
   flex-direction: column;
   margin-top: 25px;
 `
+
 const FirstContentContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 `
+
 const SecondContentContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 `
+
 const DatePickerContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
 `
+
 const ClickCalendar = styled.div`
   cursor: pointer;
 `
+
 const SeparatorLine = styled.div`
   height: 0.5;
   border: 0.5px solid #4e4e4e;
   margin-bottom: 20px;
   margin-top: 5px;
 `
+
 const InfoServicesContainer = styled.div`
   width: 100%;
   display: flex;
   color: ${(props) => props.theme.colors.black};
 `
+
 const InfoServicesInputsContainer = styled.div`
   width: 100%;
   display: ${(props) => (props.visible ? 'flex' : 'none')};
   align-items: center;
   margin-bottom: 10px;
 `
+
 const CloseButton = styled.button`
   background-color: transparent;
   border: none;
@@ -69,6 +77,7 @@ const CloseButton = styled.button`
     color: ${(props) => props.theme.colors.hoverPrimary};
   }
 `
+
 const AddServiceContainer = styled.div`
   width: 100%;
   padding: 5px 0;
@@ -90,15 +99,18 @@ const AddServiceContainer = styled.div`
     background-color: #c9c9c96a;
   }
 `
+
 const AddText = styled.p`
   color: ${(props) => props.theme.colors.black};
 `
+
 const ClientStatusButtonContainer = styled.div`
   display: flex;
   align-items: center;
   margin-top: 30px;
   margin-bottom: 40px;
 `
+
 const FooterButtonsContainer = styled.div`
   display: flex;
   align-items: center;
@@ -106,23 +118,47 @@ const FooterButtonsContainer = styled.div`
   width: 100%;
 `
 
-export default function EventModal({ isOpen, onClose }) {
+export default function EventModal({ isOpen, onClose, initialDate }) {
   const [openCalendarModal, setOpenCalendarModal] = useState(false)
   const [servicesVisible, setServicesVisible] = useState([true])
   const [selectedServices, setSelectedServices] = useState(Array(servicesVisible.length).fill(null))
+  const [selectedDropdownValue, setSelectedDropdownValue] = useState(null)
 
   const services = ['mechas', 'unhas', 'spa', 'mega hair']
   const employees = ['pami', 'maria', 'juli', 'ange']
 
   const { handleSubmit, control, reset } = useForm()
 
+  useEffect(() => {
+    if (initialDate) {
+      const startTime = initialDate.toISOString().substring(11, 16)
+      const endTime = new Date(initialDate.getTime() + 60 * 60 * 1000)
+        .toISOString()
+        .substring(11, 16)
+      reset({
+        'services[0].start': startTime,
+        'services[0].end': endTime
+      })
+    }
+  }, [initialDate, reset])
+
   const onSubmit = (data) => {
-    data.services.forEach((service, index) => {
-      console.log(`serviço ${index + 1}:`, service)
-    })
-    // fechar o modal e resetar o formulário apos a submissao
-    // onClose()
-    // reset()
+    const formData = {
+      client: data.client,
+      date: data.date,
+      services: data.services.map((service) => ({
+        name: service.name,
+        employee: service.employee,
+        time: service.time,
+        start: service.start,
+        end: service.end,
+        value: service.value
+      })),
+      total: data.total
+    }
+
+    // exiba o objeto no console
+    console.log('dados do form:', formData)
   }
 
   const handleCloseServicesContainer = (index) => {
@@ -131,6 +167,10 @@ export default function EventModal({ isOpen, onClose }) {
 
   const handleAddServicesContainer = () => {
     setServicesVisible((prev) => [...prev, true])
+  }
+
+  const handleDropdownSelect = (value) => {
+    setSelectedDropdownValue(value)
   }
 
   if (isOpen) {
@@ -180,8 +220,10 @@ export default function EventModal({ isOpen, onClose }) {
               <InfoServicesInputsContainer key={index} visible={visible}>
                 <Dropdown
                   options={services}
+                  control={control}
                   text="Escolha um serviço"
                   marginRight="40px"
+                  onOptionSelect={handleDropdownSelect}
                   onChange={(selectedOption) => {
                     const updatedServices = [...selectedServices]
                     updatedServices[index] = selectedOption
@@ -190,6 +232,7 @@ export default function EventModal({ isOpen, onClose }) {
                 />
                 <Dropdown
                   options={employees}
+                  control={control}
                   text="Escolha um funcionário"
                   marginRight="40px"
                   onChange={(selectedOption) => {
@@ -228,7 +271,7 @@ export default function EventModal({ isOpen, onClose }) {
                   isMoneyInput
                 />
 
-                <CloseButton onClick={() => handleCloseServicesContainer(index)}>
+                <CloseButton type="button" onClick={() => handleCloseServicesContainer(index)}>
                   <CloseOutlinedIcon style={{ width: 23, height: 23 }} />
                 </CloseButton>
               </InfoServicesInputsContainer>
